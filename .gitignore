@@ -1,0 +1,22 @@
+# --- macOS / Google Drive cruft ---
+.DS_Store
+*.tmp.driveupload
+*.tmp.drivedownload
+
+# --- Large raw inputs (kept in the folder, NOT under version control) ---
+# 156 MB + 19 MB LI-7810 files and ~600 MB of datasheet photos exceed GitHub's
+# 100 MB/file limit. They live in data/ locally but are git-ignored.
+data/licor/*.data
+data/datasheets/photos/
+
+# --- Regenerable intermediates (rebuilt by the pipeline) ---
+# date-subset LI-7810 files written by 01_import.R
+**/data/li7810_measurement_dates.data
+# imported/click/flux RData (re-create by re-running 01-04)
+**/RData/
+
+# --- R session files ---
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj

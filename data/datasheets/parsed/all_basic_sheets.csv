@@ -1,0 +1,110 @@
+source_photo,transect,page,date,TreeID,species,H1,H2,H3,Phenology,Moisture,D30,D80,D160,flux30Start,flux80Start,flux160Start,ppm30,ppm80,ppm160,Note
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE8A,Araca Peua,40,80,160,?,26;26;26,16,16?,20?,21:44,21:48,21:52,,,,206 (Special 2026_03)
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE32A,Imolongo,40,80,160,25% old;50% old?,28;32;32,19,18,17,20:31,20:36,20:39,,,,200 (Special 2026_03)
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE46,Mututi,,,,,,,,,,,,,,,no data (blank)
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE17,Envira Basurinha,40,80,160,2.9% old?;80% gone?,20;20;20,16,16,16,21:59,22:03,22:06,,,,187
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE27,Biorana Branca,40,80,160,50% old,18;19;17,24,23,23,21:23,21:32,21:37,,,,185
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE28A,Sucuba,40,80,160,25% old,24;26;24,10.5,10,10,20:47,20:50,20:57,,,,200
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE29,Mata mata folha miuda,,,,,,,,,,,,,,,no data (blank)
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE32B,Ripeira,40,80,160,70% old;30% new,22;19;22,55,53,51,20:10,20:14,20:19,,,,217
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE33,Macuru,40,80,160,70% new?,17;19;24,13,12,12,19:50,19:55,20:03,,,,261
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE40,Ripeira,40,80,160,25% old,16;22;23,21,20,20,19:33,19:38,19:42,,,,258
+IMG_2898,SE-NW,1 of 3,2026-05-22,SE58,Caujarana,40,80,160,25% old;7.5% gone,19;17;16,31,30,29,19:01,19:05,19:09,,,,282
+IMG_3043,N-S,3 of 3,5/25/26,S14b,Ripeira,40,80,160,,,32,31,31,17:38,17:46,17:55,,,,"isotopes @ 40+80cm, T=5min"
+IMG_3043,N-S,3 of 3,5/25/26,S15,Molongó,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S19,Envira Preta,40,80,160,,,,,,21:01,21:06,21:09,,,,
+IMG_3043,N-S,3 of 3,5/25/26,S27,Seringa barriguda,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S28,Catoré bravo,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S30,Uxí,40,80,,,,14,13.5,,21:59,22:03,,,,,
+IMG_3043,N-S,3 of 3,5/25/26,S33a,Biorana Branca,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S33b,Socoró,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S45,Cumaru,,,,,,,,,,,,,,,no data (blank)
+IMG_3043,N-S,3 of 3,5/25/26,S63b,Munguba,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N40,Embaumba Rosa,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N42a,Uixirana de uixinho,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N58,Genipapinho,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N62,Piranhieira,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N68,Tamanqueira,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,N84,Cumaru,,,,,,,,,,,,,,,no data (blank)
+IMG_3044,N-S,2 of 3,5/25/26,S10,Araçá Peua,40,80,160,,,28,27,26,17:12,17:20,17:29,,,,Special 2026_03
+IMG_3044,N-S,2 of 3,5/25/26,S14a,Molongó,40,80,,,,15,14,,20:42,20:50,,,,,Special 2026_03
+IMG_3044,N-S,2 of 3,5/25/26,S53,Paricarana,40,80,160,,,34,33,33,21:39,21:43,21:48,,,,Special 2026_03
+IMG_3044,N-S,2 of 3,5/25/26,S63a,Munguba,40,80,160,,,45,43,44.5,21:19,21:24,21:30,,,,Special 2026_03
+IMG_3044,N-S,2 of 3,5/25/26,S7,Socoró,40,80,160,,,18.5,18,17,20:27,20:30,20:35,,,,
+IMG_3046,NE-SW,3 of 3,5/25/26,SW37,Mututi,,,,,,,,,,,,,,,no data (blank)
+IMG_3046,NE-SW,3 of 3,5/25/26,SW39,Catorê Brava,,,,,,,,,,,,,,,no data (blank)
+IMG_3046,NE-SW,3 of 3,5/25/26,SW61,Seringal,40,80,160,,,,,,21:52,21:59,22:06,,,,"5/25. isotopes @ 40, 80, 160"
+IMG_3046,NE-SW,3 of 3,5/25/26,SW65,Cumarú,,,,,,,,,,,,,,,no data (blank)
+IMG_3046,NE-SW,3 of 3,5/25/26,SW77,Socoró,,,,,,,,,,,,,,,no data (blank)
+IMG_3046,NE-SW,3 of 3,5/25/26,SW82,Caramuri,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,NE46,Araçá Peúa,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,NE53,Catoré Bravo,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,SW22,Biorana Branca,40,80,160,,,,,,21:02,21:09,21:15,,,,Special 2026_03
+IMG_3047,NE-SW,2 of 3,5/25/26,SW27,Biorana,,,,,,,,,,,,,,,Special 2026_03?
+IMG_3047,NE-SW,2 of 3,5/25/26,SW28,Camu Camu,,,,,,,,,,,,,,,Special 2026_03?
+IMG_3047,NE-SW,2 of 3,5/25/26,SW51,Violeta,,,,,,,,,,,,,,,Special 2026_03? overtaken by termites?
+IMG_3047,NE-SW,2 of 3,5/25/26,SW11,Seringal,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,SW14b,Araçá Peúa,40,80,160,,,,,,20:43,20:48,20:53,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,SW18,Ribeira,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,SW26b,Socoró,,,,,,,,,,,,,,,no data (blank)
+IMG_3047,NE-SW,2 of 3,5/25/26,SW36,Piranhieira,,,,,,,,,,,,,,,no data (blank)
+IMG_3048,NE-SW,1 of 3,5/25,NE3,Seringal,,,,,,,,,,,,,,,Special 2026_03
+IMG_3048,NE-SW,1 of 3,5/25,NE14,Ingá,40,80,160,,,,,,19:23,19:32,19:37,,,,"Special 2026_03; took isotopes; 40/30?; T1 only, T2=2min"
+IMG_3048,NE-SW,1 of 3,5/25,NE25,Seringal,,,,,,,,,,,,,,,Special 2026_03
+IMG_3048,NE-SW,1 of 3,5/25,NE59,Uruçurana,40,80,160,,,,,,20:15,20:21,20:25,,,,"Special 2026_03; isotopes, as above"
+IMG_3048,NE-SW,1 of 3,5/25,NE6,Uxirana de tuxinho,40,80,160,,,,,,18:52,18:58,19:04,,,,
+IMG_3048,NE-SW,1 of 3,5/25,NE8,Molongó,50,,,,,,,,19:12,,,,,,
+IMG_3048,NE-SW,1 of 3,5/25,NE10,Ingá Xixaua,40,80,160,,,,,,18:37,18:42,,,,,
+IMG_3048,NE-SW,1 of 3,5/25,NE12,Paricarana,40,80,160,,,,,,18:21,18:26,18:29,,,,
+IMG_3048,NE-SW,1 of 3,5/25,NE22b,Uruçurana,,,,,,,,,,,,,,,no data (blank)
+IMG_3048,NE-SW,1 of 3,5/25,NE23,Piranheira,,,,,,,,,,,,,,,no data (blank)
+IMG_3048,NE-SW,1 of 3,5/25,NE31,Macucú,30,80,,,,,,,19:54,20:00,,,,,
+IMG_3048,NE-SW,1 of 3,5/25,NE32b,Envira Preta,,,,,,,,,,,,,,,no data (blank)
+IMG_3052,SE-NW,3 of 3,5/26/26,NW46B,Socoró,40,120,,,,12.5,12.5,,16:12,16:20,,,,,"Bump at 80, fork at 160"
+IMG_3052,SE-NW,3 of 3,5/26/26,NW48,Mututi,40,80,160,,,15,14,14,16:29,16:36,16:41,,,,nice 1-1 Air figure showing flux traces
+IMG_3052,SE-NW,3 of 3,5/26/26,NW78,Macucú,40,80,160,,,22,21.5,21,16:50,16:54,16:57,,,,Tree fell.
+IMG_3052,SE-NW,3 of 3,5/26/26,NW89,Aliana,,,,,,,,,,,,,,,no data (blank)
+IMG_3053,SE-NW,2 of 3,5/26,SE59,Macucú,40,80,160,90% old,21;14;13,14,14,13,19:16,19:21,19:25,85,30,2.3,5/22/26 Jon + Reginei; 273
+IMG_3053,SE-NW,2 of 3,5/26,NW16,Sucuba,40,80,160,,,20,20,19,14:05,14:14,14:26,,,,Special 2026_03
+IMG_3053,SE-NW,2 of 3,5/26,NW33a,Tamanqueira,40,80,,,,12,12,,15:05,15:09,,,,,Special 2026_03
+IMG_3053,SE-NW,2 of 3,5/26,NW6A,Lourinho,,,,,,,,,,,,,,,no data (blank)
+IMG_3053,SE-NW,2 of 3,5/26,NW6B,Biorana,,,,,,,,,,,,,,,no data (blank)
+IMG_3053,SE-NW,2 of 3,5/26,NW9,Uxirana de uxinho,40,80,120,,,14,13,13,13:44,13:52,13:56,,,,
+IMG_3053,SE-NW,2 of 3,5/26,NW22,Urucurana,40,80,160,,,,,,14:35,14:39,14:43,,,,Foia @ 160
+IMG_3053,SE-NW,2 of 3,5/26,NW23,Mata Mata folha miuda,,,,,,,,,,,,,,,no data (blank)
+IMG_3053,SE-NW,2 of 3,5/26,NW26,Macucú,50,,,,,20,,,14:56,,,,,,Decayed; hollow no flux — seal?
+IMG_3053,SE-NW,2 of 3,5/26,NW39,Seringal,40,80,160,,,17,16.5,16,15:16,15:24,15:29,,,,
+IMG_3053,SE-NW,2 of 3,5/26,NW46a,Mata Mata folha miuda,40,80,160,60% old?,,26,26,25,15:42,15:52,16:00,,,,"isotopes @ 40 + 80, t=5min"
+IMG_3174,E-W,2 of 3,5/27/26,E39b,Piranheira,,,,,,,,,,,,,,,no data (blank)
+IMG_3174,E-W,2 of 3,5/27/26,E65,Piranheira (struck through),40,,,,,38,39,,17:05,,,,,,"Cicor died? (species struck through; TreeID circled, overwrites E89b?)"
+IMG_3174,E-W,2 of 3,5/27/26,E85,Violeta,,,,,,,,,,,,,,,"no data (blank); última árvore, ótimo árvore!"
+IMG_3174,E-W,2 of 3,5/27/26,W23a,Caraipé,40,80,,,,31.5,31.5,,16:41,16:49,,,,,"Special 2026_03; isotopes - 40+80cm, t1=5min"
+IMG_3174,E-W,2 of 3,5/27/26,W52,Socoró,,,,,,,,,,,,,,,no data (blank); Special 2026_03
+IMG_3174,E-W,2 of 3,5/27/26,W79,Parajuba,,,,,,,,,,,,,,,no data (blank); Special 2026_03
+IMG_3174,E-W,2 of 3,5/27/26,W80,Mata; Mata folha miuda,,,,,,,,,,,,,,,no data (blank); Special 2026_03
+IMG_3174,E-W,2 of 3,5/27/26,W5,Macucú,40,80,,,,28,28,,16:11,16:14,,,,,
+IMG_3174,E-W,2 of 3,5/27/26,W10,Seringa Barriguda,40,70,,,,34.5,34.5,,16:20,16:28,,,,,"isotopes - 70cm+80cm, T1=5min"
+IMG_3174,E-W,2 of 3,5/27/26,W16,Seringa Barriguda,,,,,,,,,,,,,,,no data (blank)
+IMG_3174,E-W,2 of 3,5/27/26,W23b,Pato de Vaca,,,,,,,,,,,,,,,no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E1,Mata Folha Miuda,50,80,,,,18,18,,15:12,15:17,,,,,Special 2026_03
+IMG_3175,E-W,1 of 3,5/27/26,E20,Macucú,50,80,,,,34,33,,15:36,15:46,,,,,"Special 2026_03; isotopes, 40+80cm, T=5min; Climbed + auto"
+IMG_3175,E-W,1 of 3,5/27/26,E42,Mata mata folha miuda,,,,,,,,,,,,,,,Special 2026_03; no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E99,Caximbu,,,,,,,,,,,,,,,Special 2026_03; no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E13,Mata Mata Folha Miuda,50,80,,,,17,17,,15:24,15:28,,,,,
+IMG_3175,E-W,1 of 3,5/27/26,E17a,Araçá Peua,,,,,,,,,,,,,,,no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E17b,Envira Preta,,,,,,,,,,,,,,,no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E24,Araçá Peua,,,,,,,,,,,,,,,no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E31,Seringaí,,,,,,,,,,,,,,,no data (blank)
+IMG_3175,E-W,1 of 3,5/27/26,E33,Acapurana,40,80,,,,24.5,24.5,,15:57,16:01,,,,,
+IMG_3175,E-W,1 of 3,5/27/26,E39a,Paricarana,,,,,,,,,,,,,,,no data (blank)
+IMG_3176,N-S,1 of 3,5/27,N41,Socoró,45,90,,,,15,12,,14:23,14:29,,,,,Special 2026_03; holes @ Tochi? measured 1 stem above @ 90cm?
+IMG_3176,N-S,1 of 3,5/27,N42b,Envira Preta,,,,,,,,,,,,,,,Special 2026_03; no data (blank)
+IMG_3176,N-S,1 of 3,5/27,N75,Seringa Barriguda,,,,,,,,,,,,,,,Special 2026_03; no data (blank)
+IMG_3176,N-S,1 of 3,5/27,N88,Capitarí,45,90,,,,,,,14:47,14:56,,,,,Special 2026_03; autochamber; some values crossed out (illegible?)
+IMG_3176,N-S,1 of 3,5/27,N7a,Içé,45,80,,,,90,90,,13:26,13:32,,,,,buttresses
+IMG_3176,N-S,1 of 3,5/27,N7b,Araça Peua,45,80,,,,20,20,,13:41,13:46,,,,,
+IMG_3176,N-S,1 of 3,5/27,N17a,Ingá de Jauá,,,,,,,,,,,,,,,row crossed out / voided; species and heights struck through
+IMG_3176,N-S,1 of 3,5/27,N17b,Seringaí,,,,,,,,,,,,,,,no data (blank)
+IMG_3176,N-S,1 of 3,5/27,N19,Macucú,,,,,,,,,,,,,,,no data (blank)
+IMG_3176,N-S,1 of 3,5/27,N26,Piranhieira,45,80,,,,90,89,,13:57,14:02,,,,,
+IMG_3176,N-S,1 of 3,5/27,N29,Pato de Vaca,45,80,,,,13,12.5,,14:10,14:14,,,,,"termites, complex structure"

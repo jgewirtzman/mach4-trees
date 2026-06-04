@@ -1,0 +1,13 @@
+"UniqueID","TreeID","species","meas_date","time_str","height_label","height_cm","start.time"
+"BCI1_2m","BCI1","Simarouba amara",2026-05-12,12:40:00,"2m",200,2026-05-12 12:40:00
+"BCI1_Base","BCI1","Simarouba amara",2026-05-12,13:13:00,"Base",0,2026-05-12 13:13:00
+"BCI2_2m","BCI2","Heisteria concinna",2026-05-12,14:21:00,"2m",200,2026-05-12 14:21:00
+"BCI2_Base","BCI2","Heisteria concinna",2026-05-12,14:50:00,"Base",0,2026-05-12 14:50:00
+"BCI3_2m","BCI3","Heisteria concinna",2026-05-12,15:22:00,"2m",200,2026-05-12 15:22:00
+"BCI3_Base","BCI3","Heisteria concinna",2026-05-12,15:36:00,"Base",0,2026-05-12 15:36:00
+"BCI4_2m","BCI4","Heisteria concinna",2026-05-12,16:05:00,"2m",200,2026-05-12 16:05:00
+"BCI4_Base","BCI4","Heisteria concinna",2026-05-12,16:20:00,"Base",0,2026-05-12 16:20:00
+"BCI5_2m","BCI5","Simarouba amara",2026-05-12,16:38:00,"2m",200,2026-05-12 16:38:00
+"BCI5_Base","BCI5","Simarouba amara",2026-05-12,17:00:00,"Base",0,2026-05-12 17:00:00
+"BCI6_2m","BCI6","Simarouba amara",2026-05-12,18:10:00,"2m",200,2026-05-12 18:10:00
+"BCI6_Base","BCI6","Simarouba amara",2026-05-12,18:27:00,"Base",0,2026-05-12 18:27:00
