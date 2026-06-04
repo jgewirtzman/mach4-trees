@@ -17,7 +17,9 @@ raw$Depth_cm <- suppressWarnings(as.numeric(raw$Depth_cm)) # was character (mis-
 raw  <- raw[!is.na(raw$Depth_cm), ]                        # drop blank (no-data) rows
 
 # --- parse one column -> long rows with value, range (lo/hi), uncertain -------
-nums <- function(x) as.numeric(str_extract_all(x, "-?\\d+\\.?\\d*")[[1]])
+# extract UNSIGNED numbers: the "-" in an ORP range ("75-104") is a separator,
+# not a minus sign, and every parameter on this sheet is non-negative
+nums <- function(x) as.numeric(str_extract_all(x, "\\d+\\.?\\d*")[[1]])
 parse_col <- function(col, label) {
   do.call(rbind, lapply(seq_len(nrow(raw)), function(i) {
     s <- as.character(raw[[col]][i]); n <- nums(s); n <- n[is.finite(n)]
@@ -27,13 +29,14 @@ parse_col <- function(col, label) {
                uncertain = grepl("\\?", s), stringsAsFactors = FALSE)
   }))
 }
-# facet order + readable labels (kept faithful to the sheet; "ppm" left as-is)
+# facet order + readable labels. ORP rows logged as "X-X" are meaned by parse_col
+# (value = mean of the numbers); uS_cm is converted to practical salinity below.
 specs <- tribble(
   ~col,            ~label,
   "pH",            "pH",
   "mV_ORP",        "ORP (mV)",
-  "ppm",           "ppm",
-  "uS_cm",         "Sp. cond (uS/cm)",
+  "DO_ppm",        "DO (ppm)",
+  "uS_cm",         "Salinity (PSU)",
   "FNU_turbidity", "Turbidity (FNU)",
   "degC",          "Temp (C)",
   "DO_pct",        "DO (%)"
@@ -41,10 +44,27 @@ specs <- tribble(
 prof <- bind_rows(Map(parse_col, specs$col, specs$label))
 prof$parameter <- factor(prof$parameter, levels = specs$label)
 
+# specific conductance (uS/cm at 25C) -> practical salinity (PSU); near-fresh
+# here, so linear seawater ratio (35 PSU = 53087 uS/cm at 25C) is fine
+ec2psu <- function(uScm) uScm / 53087 * 35
+prof <- prof %>% mutate(
+  value = ifelse(parameter == "Salinity (PSU)", ec2psu(value), value),
+  lo    = ifelse(parameter == "Salinity (PSU)", ec2psu(lo),    lo),
+  hi    = ifelse(parameter == "Salinity (PSU)", ec2psu(hi),    hi))
+
+# force each panel to span at least one whole unit (Temp & DO% shown as-is)
+lims <- tribble(
+  ~parameter,        ~value,
+  "pH",              6,    "pH",              7,
+  "ORP (mV)",       -200,  "ORP (mV)",        200,
+  "DO (ppm)",        0,    "DO (ppm)",        1,
+  "Salinity (PSU)",  0,    "Salinity (PSU)",  5,
+  "Turbidity (FNU)", 0,    "Turbidity (FNU)", 20
+) %>% mutate(parameter = factor(parameter, levels = specs$label), Depth_cm = 0)
+
 p <- ggplot(prof, aes(value, Depth_cm)) +
+  geom_blank(data = lims, aes(value, Depth_cm), inherit.aes = FALSE) +
   geom_path(aes(group = parameter), colour = "grey55", linewidth = 0.5) +
-  geom_segment(aes(x = lo, xend = hi, y = Depth_cm, yend = Depth_cm), colour = "grey55",
-               linewidth = 0.5, na.rm = TRUE) +
   geom_point(aes(fill = uncertain), shape = 21, size = 2.6, colour = "grey20") +
   facet_wrap(~ parameter, scales = "free_x", nrow = 2) +
   scale_y_reverse(breaks = seq(0, 275, 50)) +
