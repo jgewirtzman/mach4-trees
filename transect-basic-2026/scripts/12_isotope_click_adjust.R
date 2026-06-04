@@ -53,6 +53,17 @@ for (cc in c("iso_t0_min","iso_review")) if (!cc %in% names(fx))
   fx[[cc]] <- if (cc == "iso_review") "" else NA_real_
 fx$iso_review[is.na(fx$iso_review)] <- ""
 
+# --- dedicated interactive window (NOT the RStudio plot pane) ----------------
+# locator() is unreliable in the RStudio Plots pane; open a native window so
+# clicks register. Reused across traces; reopened if the user closes it.
+ISO_DEV <- NULL
+ensure_dev <- function() {
+  if (is.null(ISO_DEV) || !(ISO_DEV %in% dev.list())) {
+    dev.new(noRStudioGD = TRUE, width = 8, height = 7.2)
+    ISO_DEV <<- dev.cur()
+  } else dev.set(ISO_DEV)
+}
+
 # --- nearest valid trace sample to a time (minutes) -> time + both gases ------
 snap <- function(tr, emin) {
   v  <- tr[ok(tr$CO2dry_ppm) & ok(tr$CH4dry_ppb), ]
@@ -118,6 +129,7 @@ for (ii in todo) {
   cur <- cur[cur$stage %in% stages, ]
 
   repeat {
+    ensure_dev()                                         # draw in the popup window
     draw_trace(tr, row, cur, stage_cols[cur$stage],
                sprintf("[click %d pts L->R: %s | Esc=keep]", N, paste(stages, collapse=", ")))
     loc <- try(locator(n = N, type = "p", pch = 3, col = "forestgreen", lwd = 2), silent = TRUE)
@@ -165,6 +177,7 @@ for (ii in todo) {
   write.csv(fx, cfg$csv, row.names = FALSE, fileEncoding = "UTF-8")   # checkpoint
 }
 
+if (!is.null(ISO_DEV) && ISO_DEV %in% dev.list()) dev.off(ISO_DEV)   # close popup
 message("\nDone. Reviewed: ", sum(fx$iso_review != "" & fx$isotope %in% c(TRUE,"TRUE")),
         " / ", length(idx), "  (saved -> ", basename(cfg$csv), ")")
 message("Re-run 11_isotope_trace_plots.R to regenerate the PDF with the adjusted times.")
