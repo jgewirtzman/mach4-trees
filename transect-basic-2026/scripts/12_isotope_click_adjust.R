@@ -5,17 +5,17 @@
 # + CH4 (bottom) trace pops up with the CURRENT t0/t1/t2 markers drawn. You then
 # click the CORRECT sampling points, LEFT -> RIGHT, in time order:
 #       t0 (ambient, before closure),  t1,  [t2 if present]
-# Each click snaps to the nearest trace sample; the markers redraw (green) for
-# confirmation and the concentrations update. The *_fluxes_isotopes.csv files
-# are rewritten in place after every trace (so progress persists).
+# It is fully click-driven (no keyboard): after your Nth click each point snaps
+# to the nearest trace sample, the markers flash green ("SAVED"), the row is
+# written, and it AUTO-ADVANCES to the next trace. N is shown in the title.
+# The *_fluxes_isotopes.csv files are rewritten after every trace.
 #
-# Per-trace controls:
-#   - click N points (N shown in the title) to set new times
-#   - press Esc / right-click WITHOUT clicking  -> keep current (marks reviewed)
-#   - after clicking, console asks: [Enter]=accept  r=redo  s=keep current
+# Per-trace controls (all in the popup window):
+#   - click N points to set the new times -> saves & advances automatically
+#   - press Esc (no clicks) -> keep current values, advance
 #
-# Resume: rows already reviewed (iso_review != "") are skipped. To re-review,
-# set REDO_ALL <- TRUE, or REDO_IDS <- c("T-W10_40cm", ...).
+# Resume: rows already reviewed (iso_review != "") are skipped. To re-do a few,
+# set REDO_IDS <- c("T-W10_40cm", ...); to redo everything, REDO_ALL <- TRUE.
 #
 # Choose the dataset below, run the whole file, then work through the pop-ups.
 # =============================================================================
@@ -128,22 +128,21 @@ for (ii in todo) {
     stringsAsFactors = FALSE)
   cur <- cur[cur$stage %in% stages, ]
 
-  repeat {
-    ensure_dev()                                         # draw in the popup window
-    draw_trace(tr, row, cur, stage_cols[cur$stage],
-               sprintf("[click %d pts L->R: %s | Esc=keep]", N, paste(stages, collapse=", ")))
-    loc <- try(locator(n = N, type = "p", pch = 3, col = "forestgreen", lwd = 2), silent = TRUE)
-    nclick <- if (inherits(loc, "try-error") || is.null(loc)) 0 else length(loc$x)
+  # Fully click-driven: click N points -> snap, flash result, save, auto-advance.
+  # No keyboard confirmation (the popup steals focus, so readline would hang).
+  ensure_dev()                                           # draw in the popup window
+  draw_trace(tr, row, cur, stage_cols[cur$stage],
+             sprintf("[click %d pts L->R: %s   (Esc = keep current)]", N, paste(stages, collapse=", ")))
+  loc <- try(locator(n = N, type = "p", pch = 3, col = "forestgreen", lwd = 2), silent = TRUE)
+  nclick <- if (inherits(loc, "try-error") || is.null(loc)) 0 else length(loc$x)
 
-    if (nclick == 0) {                                   # keep current
-      fx$iso_review[ii] <<- "kept"
-      message(sprintf("  %-16s kept current", row$UniqueID)); break
-    }
-    if (nclick != N) {
-      message(sprintf("  %-16s got %d clicks, expected %d -> kept current, will revisit",
-                      row$UniqueID, nclick, N)); break
-    }
-
+  if (nclick == 0) {                                     # Esc -> keep current, advance
+    fx$iso_review[ii] <- "kept"
+    message(sprintf("  %-16s kept current", row$UniqueID))
+  } else if (nclick != N) {                              # partial -> leave for a redo pass
+    message(sprintf("  %-16s got %d clicks, expected %d -> kept current, revisit via REDO_IDS",
+                    row$UniqueID, nclick, N))
+  } else {                                               # N clicks -> snap + save + advance
     o   <- order(loc$x)                                  # chronological
     new <- cur
     for (k in seq_len(N)) {
@@ -151,28 +150,23 @@ for (ii in todo) {
       if (is.null(sp)) next
       new$min[k] <- sp$min; new$CO2[k] <- sp$CO2; new$CH4[k] <- sp$CH4
     }
-    draw_trace(tr, row, new, rep("forestgreen", N), "ADJUSTED (green) - confirm")
-    ans <- tolower(trimws(readline("  [Enter]=accept  r=redo  s=keep current: ")))
-    if (ans == "r") next
-    if (ans == "s") { fx$iso_review[ii] <<- "kept"; message("  kept current"); break }
-
-    # accept -> write back
+    draw_trace(tr, row, new, rep("forestgreen", N), "SAVED")    # flash the result
+    Sys.sleep(0.45)
     g <- function(st, col) new[new$stage == st, col][1]
-    fx$iso_t0_min[ii]     <<- g("t0","min")
-    fx$iso_t0_CO2_ppm[ii] <<- g("t0","CO2"); fx$iso_t0_CH4_ppb[ii] <<- g("t0","CH4")
-    fx$iso_t1_min[ii]     <<- g("t1","min")
-    fx$iso_t1_CO2_ppm[ii] <<- g("t1","CO2"); fx$iso_t1_CH4_ppb[ii] <<- g("t1","CH4")
+    fx$iso_t0_min[ii]     <- g("t0","min")
+    fx$iso_t0_CO2_ppm[ii] <- g("t0","CO2"); fx$iso_t0_CH4_ppb[ii] <- g("t0","CH4")
+    fx$iso_t1_min[ii]     <- g("t1","min")
+    fx$iso_t1_CO2_ppm[ii] <- g("t1","CO2"); fx$iso_t1_CH4_ppb[ii] <- g("t1","CH4")
     if (has_t2) {
-      fx$iso_t2_min[ii]     <<- g("t2","min")
-      fx$iso_t2_CO2_ppm[ii] <<- g("t2","CO2"); fx$iso_t2_CH4_ppb[ii] <<- g("t2","CH4")
+      fx$iso_t2_min[ii]     <- g("t2","min")
+      fx$iso_t2_CO2_ppm[ii] <- g("t2","CO2"); fx$iso_t2_CH4_ppb[ii] <- g("t2","CH4")
     }
-    fx$iso_review[ii] <<- "manual"
-    fx$iso_flag[ii]   <<- trimws(paste("manually adjusted",
-                                       ifelse(is.na(row$iso_flag), "", row$iso_flag)))
-    message(sprintf("  %-16s adjusted: t0=%.2f t1=%.2f%s min", row$UniqueID,
+    fx$iso_review[ii] <- "manual"
+    fx$iso_flag[ii]   <- trimws(paste("manually adjusted",
+                                      ifelse(is.na(row$iso_flag), "", row$iso_flag)))
+    message(sprintf("  %-16s saved: t0=%.2f t1=%.2f%s min", row$UniqueID,
                     g("t0","min"), g("t1","min"),
                     if (has_t2) sprintf(" t2=%.2f", g("t2","min")) else ""))
-    break
   }
   write.csv(fx, cfg$csv, row.names = FALSE, fileEncoding = "UTF-8")   # checkpoint
 }
