@@ -51,12 +51,14 @@ make_pdf <- function(manID, iso, out_pdf, label) {
       data.frame(emin = tr$Etime/60, value = tr$CH4dry_ppb, gas = "CH4 (ppb)")[ok(tr$CH4dry_ppb), ])
 
     # markers: one row per (gas, stage) with a time + concentration ----------
+    # use the manually-adjusted t0 time when present, else the default position
+    t0_min <- if (!is.null(r$iso_t0_min) && is.finite(r$iso_t0_min)) r$iso_t0_min else T0_MIN
     mk <- bind_rows(
       data.frame(gas = "CO2 (ppm)", stage = c("t0","t1","t2"),
-                 emin  = c(T0_MIN, r$iso_t1_min, r$iso_t2_min),
+                 emin  = c(t0_min, r$iso_t1_min, r$iso_t2_min),
                  value = c(r$iso_t0_CO2_ppm, r$iso_t1_CO2_ppm, r$iso_t2_CO2_ppm)),
       data.frame(gas = "CH4 (ppb)", stage = c("t0","t1","t2"),
-                 emin  = c(T0_MIN, r$iso_t1_min, r$iso_t2_min),
+                 emin  = c(t0_min, r$iso_t1_min, r$iso_t2_min),
                  value = c(r$iso_t0_CH4_ppb, r$iso_t1_CH4_ppb, r$iso_t2_CH4_ppb)))
     mk <- mk[is.finite(mk$emin) & is.finite(mk$value), ]
     unit <- ifelse(mk$gas == "CO2 (ppm)", "ppm", "ppb")
