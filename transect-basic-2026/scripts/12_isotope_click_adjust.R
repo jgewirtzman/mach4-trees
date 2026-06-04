@@ -22,7 +22,7 @@
 
 DATASET  <- "climbing"     # "climbing" or "basic"
 REDO_ALL <- FALSE          # TRUE = review every isotope trace again
-REDO_IDS <- character(0)   # specific UniqueIDs to force-review
+REDO_IDS <- c("T-E20_160cm")   # specific UniqueIDs to force-review (reset to character(0) when done)
 
 if (!interactive()) stop("Run this in an interactive R session (RStudio / R.app).")
 suppressMessages({ library(dplyr) })
