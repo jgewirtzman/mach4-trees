@@ -52,14 +52,15 @@ prof <- prof %>% mutate(
   lo    = ifelse(parameter == "Salinity (PSU)", ec2psu(lo),    lo),
   hi    = ifelse(parameter == "Salinity (PSU)", ec2psu(hi),    hi))
 
-# force each panel to span at least one whole unit (Temp & DO% shown as-is)
+# force each panel to span at least one whole unit (Temp shown as-is)
 lims <- tribble(
   ~parameter,        ~value,
   "pH",              6,    "pH",              7,
   "ORP (mV)",       -200,  "ORP (mV)",        200,
   "DO (ppm)",        0,    "DO (ppm)",        1,
   "Salinity (PSU)",  0,    "Salinity (PSU)",  5,
-  "Turbidity (FNU)", 0,    "Turbidity (FNU)", 20
+  "Turbidity (FNU)", 0,    "Turbidity (FNU)", 20,
+  "DO (%)",          0,    "DO (%)",          10
 ) %>% mutate(parameter = factor(parameter, levels = specs$label), Depth_cm = 0)
 
 p <- ggplot(prof, aes(value, Depth_cm)) +
