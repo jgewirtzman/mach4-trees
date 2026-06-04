@@ -29,25 +29,29 @@ n_tree <- length(unique(inv$TreeID))
 meas <- inv %>%
   group_by(campaign, TreeID, height_cm, height_m) %>%
   summarise(n_vial = n(), n_tp = n_distinct(timepoint), .groups = "drop")
-# order trees within each campaign by the max height reached
-ord <- meas %>% group_by(campaign, TreeID) %>% summarise(mx = max(height_m), .groups = "drop") %>%
-  arrange(campaign, mx)
-meas$TreeID <- factor(meas$TreeID, levels = unique(ord$TreeID))
+# one column per tree (NOT faceted), ordered by max height reached, so trees
+# measured in both campaigns show both colours stacked in the same column
+ord <- meas %>% group_by(TreeID) %>% summarise(mx = max(height_m), .groups = "drop") %>% arrange(mx)
+meas$TreeID <- factor(meas$TreeID, levels = ord$TreeID)
+# faint stem line spanning each tree's sampled height range
+stem <- meas %>% group_by(TreeID) %>% summarise(lo = min(height_m), hi = max(height_m), .groups = "drop")
+dodge <- position_dodge(width = 0.55)
 
-p1 <- ggplot(meas, aes(TreeID, height_m)) +
-  geom_line(aes(group = TreeID), colour = "grey80", linewidth = 0.5) +
-  geom_point(aes(size = n_tp, colour = campaign)) +
-  facet_grid(. ~ campaign, scales = "free_x", space = "free_x") +
+p1 <- ggplot(meas, aes(TreeID, height_m, colour = campaign)) +
+  geom_linerange(data = stem, aes(x = TreeID, ymin = lo, ymax = hi),
+                 inherit.aes = FALSE, colour = "grey85", linewidth = 0.6) +
+  geom_point(aes(size = n_tp, shape = campaign), position = dodge) +
   scale_y_continuous(breaks = c(0.4, 1, 2, 4, 6, 8, 10)) +
   scale_size_continuous(range = c(2.2, 4.6), breaks = c(2, 3)) +
   scale_colour_manual(values = c("Climbed (intensive)" = "#1b7837", "Ground (basic)" = "#762a83"),
-                      guide = "none") +
+                      name = NULL) +
+  scale_shape_manual(values = c("Climbed (intensive)" = 16, "Ground (basic)" = 17), name = NULL) +
   labs(x = NULL, y = "Sampling height (m)", size = "timepoints\n(t0,t1[,t2])") +
   theme_classic(base_size = 13) +
-  theme(strip.background = element_blank(), strip.text = element_text(face = "bold"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid.major.y = element_line(colour = "grey92"))
-save_both(p1, "isotope_summary_coverage", w = 9, h = 6)
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.y = element_line(colour = "grey92"),
+        legend.position = "top")
+save_both(p1, "isotope_summary_coverage", w = 8.5, h = 6)
 
 # ===== FIG 2: concentrations captured ========================================
 gl <- inv %>%
