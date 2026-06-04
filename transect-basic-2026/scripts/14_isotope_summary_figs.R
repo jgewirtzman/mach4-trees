@@ -34,23 +34,20 @@ ord <- meas %>% group_by(campaign, TreeID) %>% summarise(mx = max(height_m), .gr
   arrange(campaign, mx)
 meas$TreeID <- factor(meas$TreeID, levels = unique(ord$TreeID))
 
-p1 <- ggplot(meas, aes(height_m, TreeID)) +
+p1 <- ggplot(meas, aes(TreeID, height_m)) +
   geom_line(aes(group = TreeID), colour = "grey80", linewidth = 0.5) +
   geom_point(aes(size = n_tp, colour = campaign)) +
-  facet_grid(campaign ~ ., scales = "free_y", space = "free_y") +
-  scale_x_continuous(breaks = c(0.4, 1, 2, 4, 6, 8, 10)) +
+  facet_grid(. ~ campaign, scales = "free_x", space = "free_x") +
+  scale_y_continuous(breaks = c(0.4, 1, 2, 4, 6, 8, 10)) +
   scale_size_continuous(range = c(2.2, 4.6), breaks = c(2, 3)) +
   scale_colour_manual(values = c("Climbed (intensive)" = "#1b7837", "Ground (basic)" = "#762a83"),
                       guide = "none") +
-  labs(x = "Sampling height (m)", y = NULL, size = "timepoints\n(t0,t1[,t2])",
-       title = "Isotope sampling coverage",
-       subtitle = sprintf("%d trees · %d chamber measurements · %d vials (t0 ambient, t1, t2)",
-                          n_tree, n_meas, n_vial)) +
+  labs(x = NULL, y = "Sampling height (m)", size = "timepoints\n(t0,t1[,t2])") +
   theme_classic(base_size = 13) +
   theme(strip.background = element_blank(), strip.text = element_text(face = "bold"),
-        plot.subtitle = element_text(size = 10, colour = "grey30"),
-        panel.grid.major.x = element_line(colour = "grey92"))
-save_both(p1, "isotope_summary_coverage", w = 8, h = 6)
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.y = element_line(colour = "grey92"))
+save_both(p1, "isotope_summary_coverage", w = 9, h = 6)
 
 # ===== FIG 2: concentrations captured ========================================
 gl <- inv %>%
@@ -58,22 +55,18 @@ gl <- inv %>%
   pivot_longer(c(CH4_ppm, CO2_ppm), names_to = "gas", values_to = "conc") %>%
   mutate(gas = recode(gas, CH4_ppm = "CH[4]~(ppm)", CO2_ppm = "CO[2]~(ppm)"))
 
-p2 <- ggplot(gl, aes(height_m, conc, colour = timepoint)) +
-  geom_point(position = position_jitter(width = 0.06, height = 0), size = 1.9, alpha = 0.85) +
-  facet_wrap(~ gas, scales = "free_y", labeller = label_parsed) +
+p2 <- ggplot(gl, aes(conc, height_m, colour = timepoint)) +
+  geom_point(position = position_jitter(width = 0, height = 0.06), size = 1.9, alpha = 0.85) +
+  facet_wrap(~ gas, scales = "free_x", labeller = label_parsed) +
   scale_colour_manual(values = tp_cols, name = "timepoint",
                       labels = c(t0 = "t0 (ambient)", t1 = "t1", t2 = "t2")) +
-  scale_x_continuous(breaks = c(0.4, 1, 2, 4, 6, 8, 10)) +
-  labs(x = "Sampling height (m)", y = "concentration in vial",
-       title = "What the isotope vials captured",
-       subtitle = "Strong CH4 build-up at the stem base; near-ambient toward the canopy") +
+  scale_y_continuous(breaks = c(0.4, 1, 2, 4, 6, 8, 10)) +
+  # CH4 spans ambient ~2 to ~200 ppm; sqrt tames the range without hiding the floor
+  scale_x_continuous(trans = "sqrt") +
+  labs(x = "concentration in vial", y = "Sampling height (m)") +
   theme_classic(base_size = 13) +
   theme(strip.background = element_blank(), strip.text = element_text(face = "bold", size = 12),
-        plot.subtitle = element_text(size = 10, colour = "grey30"), legend.position = "top")
-
-# CH4 panel reads best on a log axis (spans ambient ~2 to ~200 ppm); CO2 linear.
-# Use a single sqrt transform that tames both without hiding the ambient floor.
-p2 <- p2 + scale_y_continuous(trans = "sqrt")
-save_both(p2, "isotope_summary_concentration", w = 9, h = 5)
+        legend.position = "top")
+save_both(p2, "isotope_summary_concentration", w = 8, h = 6)
 
 cat("Saved 2 figures to", figdir, "\n  isotope_summary_coverage.[pdf/png]\n  isotope_summary_concentration.[pdf/png]\n")
