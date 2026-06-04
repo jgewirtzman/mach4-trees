@@ -59,7 +59,11 @@ fx$iso_review[is.na(fx$iso_review)] <- ""
 ISO_DEV <- NULL
 ensure_dev <- function() {
   if (is.null(ISO_DEV) || !(ISO_DEV %in% dev.list())) {
-    dev.new(noRStudioGD = TRUE, width = 8, height = 7.2)
+    # Force a real OS window (NOT RStudioGD): repeated locator() on the RStudio
+    # plot pane is unstable and can crash R. quartz() = separate macOS window.
+    if (capabilities("aqua"))            quartz(width = 8, height = 7.2)
+    else if (capabilities("X11"))        x11(width = 8, height = 7.2)
+    else                                 dev.new(noRStudioGD = TRUE, width = 8, height = 7.2)
     ISO_DEV <<- dev.cur()
   } else dev.set(ISO_DEV)
 }
