@@ -1,17 +1,19 @@
 # =============================================================================
-# 03_manual_id.R  (BASIC trees)
-# Interactive manual identification of measurement start/end times, CO2 (top) +
-# CH4 (bottom) stacked via click.peak2.stacked(). Same procedure as
-# transect-trees-2026; ~128 measurements -> done in batches of 20.
+# 03_manual_id.R  (BASIC trees) -- RESUMABLE by UniqueID
+# Interactive manual identification, CO2 (top) + CH4 (bottom) stacked.
 #
-# *** RUN IN AN INTERACTIVE R SESSION (RStudio / R GUI). Does NOT run under
-#     Rscript -- it needs a clickable plot device. ***
+# *** RUN IN AN INTERACTIVE R SESSION (RStudio / R GUI). ***
 #
-# For each measurement: TOP = CO2dry_ppm (click START then END), BOTTOM =
-# CH4dry_ppb (reference). Blue line = recorded start; dashed grey = +typical.
+# Resume model (robust to re-dating / re-ordering of the auxfile):
+#   - Already-clicked measurements are kept in RData/manID_done.RData, keyed by
+#     UniqueID. This script SKIPS any UniqueID already in manID_done and only
+#     prompts for the ones still missing.
+#   - New clicks accumulate in RData/manID_new_batches.RData (checkpointed after
+#     every batch), then are merged with manID_done into manID.RData.
 #
-# You can re-run a single batch by editing `batches` below; results accumulate
-# in manID_batches (saved after each batch so you don't lose progress).
+# NOTE: save.plots is OFF here. A failed plot-write previously aborted a batch
+# and lost its clicks; skipping the PDF removes that failure point. The live
+# validation flash still shows. (Re-make validation PDFs later from manID.)
 # =============================================================================
 
 source(file.path(
@@ -21,46 +23,50 @@ source(file.path(scripts_dir, "helpers", "click_peak2_stacked.R"))
 load(file.path(rdata_dir, "licor_imported.RData"))   # licor
 load(file.path(rdata_dir, "auxfile.RData"))          # aux, field_meta
 
-dir.create(file.path(plots_dir, "click_peak"), recursive = TRUE, showWarnings = FALSE)
+# --- Load already-done clicks (keyed by UniqueID) ----------------------------
+done_path <- file.path(rdata_dir, "manID_done.RData")
+if (file.exists(done_path)) { load(done_path) } else { manID_done <- NULL }
+done_ids <- unique(manID_done$UniqueID)
+message(length(done_ids), " measurements already clicked (from manID_done.RData)")
 
-# --- Observation windows ------------------------------------------------------
+# --- Observation windows on the CURRENT auxfile ------------------------------
 ow <- obs.win(inputfile = licor, auxfile = aux,
               obs.length = obs_length, shoulder = shoulder_secs)
-message(length(ow), " observation windows created")
+ow_ids <- vapply(ow, function(x) unique(as.character(x$UniqueID))[1], character(1))
 
-# --- Interactive identification in batches of 20 -----------------------------
-win_w <- 7; win_h <- 6
-batch_size <- 20
-n <- length(ow)
-batches <- split(seq_len(n), ceiling(seq_len(n) / batch_size))
+# --- Which measurements still need clicking ----------------------------------
+todo <- which(!(ow_ids %in% done_ids))
+message("To click now: ", length(todo), " measurements")
+print(ow_ids[todo])
 
-# Resume support: keep a per-batch list on disk.
-mb_path <- file.path(rdata_dir, "manID_batches.RData")
-if (file.exists(mb_path)) load(mb_path) else manID_batches <- vector("list", length(batches))
+# --- Click the remaining ones, in batches of 20 ------------------------------
+win_w <- 7; win_h <- 6; batch_size <- 20
+todo_batches <- split(todo, ceiling(seq_along(todo) / batch_size))
 
-for (b in seq_along(batches)) {
-  if (!is.null(manID_batches[[b]])) {            # already done -> skip
-    message("Batch ", b, " already done; skipping. (delete it in manID_batches to redo)")
-    next
+nb_path <- file.path(rdata_dir, "manID_new_batches.RData")
+if (file.exists(nb_path)) load(nb_path) else manID_new_batches <- vector("list", length(todo_batches))
+if (length(manID_new_batches) != length(todo_batches))            # todo changed -> reset
+  manID_new_batches <- vector("list", length(todo_batches))
+
+for (b in seq_along(todo_batches)) {
+  if (!is.null(manID_new_batches[[b]])) {
+    message("New batch ", b, " already done; skipping."); next
   }
-  message("=== Batch ", b, " of ", length(batches), " (measurements ",
-          min(batches[[b]]), "-", max(batches[[b]]), ") ===")
-  manID_batches[[b]] <- click.peak2.stacked(
+  message("=== NEW batch ", b, " of ", length(todo_batches),
+          " (", length(todo_batches[[b]]), " measurements) ===")
+  manID_new_batches[[b]] <- click.peak2.stacked(
     ow.list   = ow,
-    seq       = batches[[b]],
-    gastype   = "CO2dry_ppm",     # clicked panel (top)
-    gastype2  = "CH4dry_ppb",     # reference panel (bottom)
+    seq       = todo_batches[[b]],
+    gastype   = "CO2dry_ppm", gastype2 = "CH4dry_ppb",
     ref.secs  = typical_obs_secs,
-    plot.lim  = c(300, 5000),
-    plot.lim2 = c(1500, 100000),
+    plot.lim  = c(300, 5000), plot.lim2 = c(1500, 100000),
     width = win_w, height = win_h,
-    save.plots = file.path(plots_dir, "click_peak", sprintf("batch%02d.pdf", b))
-  )
-  save(manID_batches, file = mb_path)            # checkpoint after each batch
+    save.plots = NULL)                       # OFF: avoids the abort-and-lose-clicks bug
+  save(manID_new_batches, file = nb_path)    # checkpoint after every batch
 }
 
-# --- Combine and save ---------------------------------------------------------
-manID <- as.data.frame(dplyr::bind_rows(manID_batches))
+# --- Merge done + new -> manID -----------------------------------------------
+manID <- as.data.frame(dplyr::bind_rows(manID_done, dplyr::bind_rows(manID_new_batches)))
 save(manID, file = file.path(rdata_dir, "manID.RData"))
-message("Manual ID complete: ", length(unique(manID$UniqueID)), " measurements")
-message("Saved manID.RData. Proceed to 04_flux_calculation.R")
+message("Manual ID complete: ", length(unique(manID$UniqueID)), " / ", length(ow),
+        " measurements. Saved manID.RData. Proceed to 04_flux_calculation.R")

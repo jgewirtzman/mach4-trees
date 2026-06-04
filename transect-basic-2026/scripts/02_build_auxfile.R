@@ -28,6 +28,16 @@ norm_date <- function(s) {
 }
 m$meas_date <- norm_date(m$date)
 
+# --- Per-tree date overrides --------------------------------------------------
+# A tree whose true measurement day differs from its sheet's printed date,
+# confirmed by the analyzer data + the tree's own field note.
+#   SE59: on sheet IMG_3053 (dated 5/26) but its note reads "5/22/26 Jon+Reginei".
+#         5/26 has a data gap at 19:16-19:25; 5/22 has the real measurement (fits
+#         between SE58 19:09 and SE40 19:33). So SE59 -> 2026-05-22.
+tree_date_override <- c("SE59" = "2026-05-22")
+.ov <- tree_date_override[m$TreeID]
+m$meas_date[!is.na(.ov)] <- as.Date(unname(.ov[!is.na(.ov)]))
+
 # --- Explode the 3 height positions, paired with their flux start times -------
 extract_time <- function(v) stringr::str_extract(trimws(v), "\\d{1,2}:\\d{2}")
 extract_h    <- function(v) suppressWarnings(as.numeric(stringr::str_extract(v, "\\d+\\.?\\d*")))
