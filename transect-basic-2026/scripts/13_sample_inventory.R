@@ -3,14 +3,8 @@
 # Consolidated isotope SAMPLE INVENTORY for the tech running the vials.
 # One row per physical sample (vial): t0 (ambient), t1, t2 for every flux that
 # has isotopes, across BOTH datasets (climbing + basic). For each sample it
-# gives the clock time, the estimated CO2 & CH4 concentration in the vial, and
-# whether/how much to dilute, plus the measurement's flux rate for context.
-#
-# Dilution: a vial is flagged if its concentration exceeds the analyzer ceiling
-# below. Suggested factor = ceil(conc / ceiling). EDIT these two numbers to
-# match your instrument's working range, then re-run.
-CO2_CEIL_PPM <- 2000      # flag CO2 vials above this (ppm)
-CH4_CEIL_PPM <- 12        # flag CH4 vials above this (ppm)
+# gives the clock time and the estimated CO2 & CH4 concentration in the vial
+# (so the tech can judge dilution), plus the measurement's flux rate for context.
 #
 # Writes: results/sample_inventory_isotopes.csv          (long: one row/vial)
 #         results/sample_inventory_isotopes_wide.csv     (one row/measurement)
@@ -68,19 +62,11 @@ inv <- inv %>%
   mutate(
     # campaign tag keeps IDs unique for trees sampled in BOTH campaigns
     Sample_ID = paste0(TreeID, "_", height_cm, "cm_", timepoint, "_",
-                       ifelse(dataset == "climbing", "C", "B")),
-    dilute_CO2 = ifelse(is.finite(CO2_ppm) & CO2_ppm > CO2_CEIL_PPM, "YES", "no"),
-    dilute_CH4 = ifelse(is.finite(CH4_ppm) & CH4_ppm > CH4_CEIL_PPM, "YES", "no"),
-    dil_factor_CO2 = ifelse(is.finite(CO2_ppm), pmax(1, ceiling(CO2_ppm / CO2_CEIL_PPM)), NA),
-    dil_factor_CH4 = ifelse(is.finite(CH4_ppm), pmax(1, ceiling(CH4_ppm / CH4_CEIL_PPM)), NA),
-    # if both gases are run from one vial, dilution must satisfy the larger factor
-    dil_factor_max = pmax(dil_factor_CO2, dil_factor_CH4, na.rm = TRUE),
-    DILUTE = ifelse(dilute_CO2 == "YES" | dilute_CH4 == "YES", "YES", "no")
+                       ifelse(dataset == "climbing", "C", "B"))
   ) %>%
   arrange(dataset, TreeID, height_cm, match(timepoint, c("t0","t1","t2"))) %>%
   select(Sample_ID, dataset, date, TreeID, species, height_cm, timepoint,
          sample_clock, elapsed_min, CO2_ppm, CH4_ppm,
-         DILUTE, dil_factor_max, dilute_CO2, dil_factor_CO2, dilute_CH4, dil_factor_CH4,
          CO2_flux_umol_m2_s, CH4_flux_nmol_m2_s, CH4_flux_ug_m2_h, review, note)
 
 out_long <- file.path(base, "results", "sample_inventory_isotopes.csv")
@@ -103,8 +89,7 @@ cat(sprintf("Sample inventory: %d vials across %d measurements (%d trees).\n",
             nrow(inv), nrow(fb)+nrow(fc), length(unique(inv$TreeID))))
 cat(sprintf("  by timepoint:  t0=%d  t1=%d  t2=%d\n",
             sum(inv$timepoint=="t0"), sum(inv$timepoint=="t1"), sum(inv$timepoint=="t2")))
-cat(sprintf("  need dilution (ceil CO2>%d ppm / CH4>%d ppm):  CO2 vials=%d  CH4 vials=%d\n",
-            CO2_CEIL_PPM, CH4_CEIL_PPM, sum(inv$dilute_CO2=="YES"), sum(inv$dilute_CH4=="YES")))
-cat("  max dilution factor needed:  CO2 x", max(inv$dil_factor_CO2, na.rm=TRUE),
-    "  CH4 x", max(inv$dil_factor_CH4, na.rm=TRUE), "\n")
+cat(sprintf("  CO2 range: %d-%d ppm   CH4 range: %.1f-%.1f ppm\n",
+            min(inv$CO2_ppm,na.rm=T), max(inv$CO2_ppm,na.rm=T),
+            min(inv$CH4_ppm,na.rm=T), max(inv$CH4_ppm,na.rm=T)))
 cat("\nWrote:\n  ", out_long, "\n  ", out_wide, "\n")
