@@ -40,12 +40,20 @@ load(file.path(base, "transect-basic-2026/RData/manID.RData"))            # manI
 mb <- manID
 fb <- read.csv(file.path(base, "transect-basic-2026/results/transect_basic_2026_fluxes_with_mdf.csv"),
                stringsAsFactors = FALSE, encoding = "UTF-8")
+# Basic isotope samples (named heights, t1 = 5 min, t2 = 5 + stated). The last
+# block (NE59 H2 .. SW22) was reconciled from the May Isotope Sampling Sheet
+# (Trees-Actual); see 10b_add_basic_isotopes.R, which adds them incrementally so
+# manual reviews from 12_ are preserved. NOTE: a from-scratch run of THIS script
+# regenerates defaults for ALL rows and overwrites manual (clicked) reviews —
+# re-review in 12_ afterward, or use 10b_ to add new samples without clobbering.
 biso <- tibble::tribble(
   ~TreeID, ~h_named, ~t1_min, ~t2_min,
   "S14b",40,5,NA, "S14b",80,5,NA, "NW46a",40,5,NA, "NW46a",80,5,NA,
   "E20",40,5,NA,  "E20",80,5,NA,  "W23a",40,5,NA,  "W23a",80,5,NA,
   "W10",40,5,NA,  "W10",80,5,NA,  "NE14",40,5,7,   "NE59",40,5,7,
-  "SW61",40,5,NA, "SW61",80,5,NA, "SW61",160,5,NA) %>%
+  "SW61",40,5,NA, "SW61",80,5,NA, "SW61",160,5,NA,
+  "NE59",80,5,NA, "N88",40,5,NA,  "N88",80,5,NA,   "NW16",40,5,NA,
+  "NW16",80,5,NA, "S10",40,5,NA,  "S10",80,5,NA,   "SW22",40,5,NA, "SW22",80,5,NA) %>%
   mutate(bin = as.character(hbin(h_named)))
 fb$bin <- as.character(hbin(fb$height_cm))
 fb <- fb %>% left_join(biso, by = c("TreeID","bin"))
